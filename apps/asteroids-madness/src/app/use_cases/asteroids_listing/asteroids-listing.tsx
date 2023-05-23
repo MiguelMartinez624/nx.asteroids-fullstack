@@ -50,7 +50,6 @@ export const AsteroidsListing: React.FC = () => {
       {!request && <Typography text="Please select a Start Date and a End Date"/>}
 
       {request && <AsteroidsList
-        {/*blocking request to do it one by one*/}
         blockActions={(itsLoadingAdd || itsLoadingRemove)}
         itsLoading={itsLoading}
         asteroidsList={asteroidsList}
