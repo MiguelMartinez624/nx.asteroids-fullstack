@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useFetchAsteroidsListCase} from "./use_fetch_asteroids";
 import {Input, useField} from "../../commons/ui/input";
 import {AsteroidsList} from "./components/asteroids-list";
@@ -7,14 +7,28 @@ import {FetchAsteroidsRequest} from "@asteroids/asteroids";
 import {Typography} from "../../commons/ui";
 import {Centered, WithLoading} from "../../commons/layout";
 import {useAddToFavoriteCase} from "./use_add_to_favorite";
+import {useRemoveFromFavorite} from "./use_remove_from_favorite";
 
 export const AsteroidsListing: React.FC = () => {
-  const [request, setRequest] = useState<FetchAsteroidsRequest | null>(null)
-  const {itsLoading, execute, asteroidsList} = useFetchAsteroidsListCase()
-  const {execute: addToFavorite} = useAddToFavoriteCase()
-
+  const [request, setRequest] = useState<FetchAsteroidsRequest | null>(null);
+  const {itsLoading, execute, asteroidsList} = useFetchAsteroidsListCase();
+  const {execute: addToFavorite, itsLoading: itsLoadingAdd} = useAddToFavoriteCase();
+  const {execute: removeFromFavorite, itsLoading: itsLoadingRemove} = useRemoveFromFavorite();
   const startDate = useField<string>("");
   const endDate = useField<string>("");
+
+  const markAsFavorite = useCallback(
+    (asteroid) => {
+      addToFavorite(asteroid.id)
+        .then(() => asteroid.itsFavorite = true);
+    }, [])
+
+
+  const removeFromFavoriteHandler = useCallback(
+    (asteroid) => {
+      removeFromFavorite(asteroid.id)
+        .then(() => asteroid.itsFavorite = false);
+    }, []);
 
   return (
     <Centered>
@@ -36,10 +50,12 @@ export const AsteroidsListing: React.FC = () => {
       {!request && <Typography text="Please select a Start Date and a End Date"/>}
 
       {request && <AsteroidsList
+        {/*blocking request to do it one by one*/}
+        blockActions={(itsLoadingAdd || itsLoadingRemove)}
         itsLoading={itsLoading}
         asteroidsList={asteroidsList}
-        addToFavoriteHandler={(asteroid)=>addToFavorite(asteroid.id)}
-        goToDetailsHandler={console.log}
+        addToFavoriteHandler={markAsFavorite}
+        removeFavoriteHandler={removeFromFavoriteHandler}
       />}
 
     </Centered>

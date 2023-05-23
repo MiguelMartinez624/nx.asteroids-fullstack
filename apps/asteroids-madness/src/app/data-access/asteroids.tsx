@@ -32,3 +32,20 @@ export async function addToFavorites(asteroidsId: string): Promise<boolean> {
     } )
 
 }
+
+export async function removeFromFavorites(asteroidsId: string): Promise<boolean> {
+
+  return fetch(`/api/asteroids/${asteroidsId}/remove`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then( async (res) => {
+      const result = await res.json();
+      console.log({result})
+      return result
+    } )
+
+}
+

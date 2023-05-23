@@ -4,7 +4,7 @@ import {
   FetchAsteroidsList,
   FetchAsteroidsRequest,
   ListingAsteroid,
-  Page
+  Page, RemoveFromFavorite
 } from "@asteroids/asteroids";
 import {AsteroidsService, AsteroidsStore} from "./services";
 
@@ -31,6 +31,25 @@ export class APIAddToFavorite implements AddToFavorite {
     const asteroidDetails: AsteroidDetails = await this.asteroidsService.getById(asteroidID);
 
     this.asteroidStore.saveAsteroid(asteroidID, asteroidDetails);
+
+    return true;
+  }
+
+}
+
+
+export class APIRemoveFromFavorite implements RemoveFromFavorite {
+
+  constructor(private readonly asteroidsService: AsteroidsService,
+              private readonly asteroidStore: AsteroidsStore) {
+  }
+
+  async execute(asteroidID: string): Promise<boolean> {
+    const asteroidDetails: AsteroidDetails = await this.asteroidsService.getById(asteroidID);
+    if (!asteroidDetails) {
+      throw {message: "could not found asteroid.", args: asteroidID}
+    }
+    this.asteroidStore.remove(asteroidID);
 
     return true;
   }

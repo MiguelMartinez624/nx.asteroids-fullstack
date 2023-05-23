@@ -8,16 +8,17 @@ const StyledApp = styled.div`
     display: flex;
   }
 
-  .bg-blue{
+  .bg-blue {
     background: darkblue;
   }
 
-  header{
+  header {
     height: 60px;
     justify-items: center;
     display: flex;
     align-items: center;
   }
+
 
   // Your style here
 `;
@@ -25,12 +26,14 @@ const StyledApp = styled.div`
 export function App() {
   return (
     <StyledApp>
-      <header className="flex bg-blue">
-        <Typography color="white" text="THe asteroids Maddnes!"/>
-      </header>
-      <main>
-        <AsteroidsListing/>
-      </main>
+      <div style={{width:"50%"}}>
+        <header className="flex bg-blue">
+          <Typography type="title" color="white" text="The Asteroids Madness!"/>
+        </header>
+        <main>
+          <AsteroidsListing/>
+        </main>
+      </div>
     </StyledApp>
   );
 }

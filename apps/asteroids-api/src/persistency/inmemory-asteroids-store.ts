@@ -13,4 +13,12 @@ export class InMemoryAsteroidsStore implements AsteroidsStore {
     InMemoryAsteroidsStore.ASTEROIDS_MAP.set(asteroidID, asteroidDetails);
   }
 
+  remove(asteroidID: string): void {
+    if (!InMemoryAsteroidsStore.ASTEROIDS_MAP.get(asteroidID)) {
+      throw {error: "asteroid ist not  persisted", args: asteroidID};
+    }
+
+    InMemoryAsteroidsStore.ASTEROIDS_MAP.delete(asteroidID);
+  }
+
 }

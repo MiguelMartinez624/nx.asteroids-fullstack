@@ -3,19 +3,24 @@ import styled from "styled-components";
 
 const StyledParagraph = styled.p`
   margin: 0px;
-  color: ${props => props.$primary ? "white" : "palevioletred"};
+
+  .title {
+    font-weight: bold;
+    font-size: 34px;
+  }
+
 `;
 
 
 export interface TypographyProps {
   text: string;
   type?: 'title' | 'label'
-
+  color: string
 }
 
-export const Typography: React.FC<TypographyProps> = ({type = 'label', text}) => {
+export const Typography: React.FC<TypographyProps> = ({type = 'label', text, color}) => {
   return (
-    <StyledParagraph $color>
-      {text}
+    <StyledParagraph style={{color: color}}>
+      <span className={type}>{text}</span>
     </StyledParagraph>)
 }

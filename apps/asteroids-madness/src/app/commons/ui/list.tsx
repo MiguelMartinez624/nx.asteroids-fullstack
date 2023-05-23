@@ -2,6 +2,7 @@ import * as React from 'react'
 import {Button} from "./button";
 import styled from "styled-components";
 import {Typography} from "./typography";
+import {ReactNode} from "react";
 
 const ListStyled = styled.ul`
   list-style: none;
@@ -18,6 +19,7 @@ const ListItemStyle = styled.li`
     flex: 1;
     flex-direction: column;
   }
+
   margin: 1rem;
   padding: 1rem;
   border: 1px solid rgba(0, 0, 139, 0.26);
@@ -34,17 +36,19 @@ export interface Field {
 }
 
 export interface ActionField {
-  label: string;
-  handler: (data: any) => void;
+  resolveLabel: (item: any) => string;
+  button?: ReactNode;
+  resolveHandler: (item: any) => (data: any) => void;
 }
 
 export interface ListProps {
   fields: Field[];
   actions?: ActionField[];
   data: any[];
+  blockActions: boolean
 }
 
-export const List: React.FC<ListProps> = ({fields, data, actions}) => {
+export const List: React.FC<ListProps> = ({fields, data, actions, blockActions}) => {
 
   if (!data || data.length === 0) {
     return <h3>No records</h3>
@@ -60,7 +64,15 @@ export const List: React.FC<ListProps> = ({fields, data, actions}) => {
           </div>)
         }
         {
-          actions?.map(c => <Button key={c.label} label={c.label} onClick={() => c.handler(item)}></Button>)
+          actions?.map(c => (
+            <Button
+              disabled={blockActions}
+              key={item['id']}
+              label={c.resolveLabel(item)}
+              onClick={() => {
+                const handler = c.resolveHandler(item);
+                handler(item);
+              }}/>))
         }
       </ListItemStyle>)}
     </ListStyled>

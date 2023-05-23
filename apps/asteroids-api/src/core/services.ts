@@ -11,4 +11,6 @@ export interface AsteroidsService {
 export interface AsteroidsStore {
 
   saveAsteroid(asteroidID: string, asteroidDetails: AsteroidDetails): void;
+
+  remove(asteroidID: string): void;
 }

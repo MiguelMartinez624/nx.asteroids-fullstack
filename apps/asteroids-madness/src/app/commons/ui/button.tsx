@@ -9,16 +9,18 @@ const ButtonWrapper = styled.button`
   border: 2px solid palevioletred;
   border-radius: 3px;
   background: none;
+  cursor:pointer;
 `;
 
 export interface ButtonProps {
   label: string;
   onClick?: () => void
+  disabled: boolean
 }
 
-export const Button: React.FC<ButtonProps> = ({label, onClick}) => {
+export const Button: React.FC<ButtonProps> = ({label, onClick, disabled}) => {
   return (
-    <ButtonWrapper onClick={onClick}>
+    <ButtonWrapper disabled={disabled} onClick={onClick}>
       {label}
     </ButtonWrapper>
   );

@@ -19,3 +19,22 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
+
+
+## QUERY 
+
+SELECT "users".id, "users".name, "users".email, SUM(cast("products".price as float) * cast("orders".quantity as float)) as totalPaid FROM "users"
+JOIN "orders" ON "orders".user_id = "users".id
+JOIN "products" ON "products".id = "orders".product_id
+WHERE "users".id IN (
+SELECT user_id FROM (
+SELECT "orders".user_id, COUNT("orders".user_id) as userCount FROM "orders"
+JOIN "products" ON "products".id = "orders".product_id
+WHERE category = 'Electronics'
+GROUP BY user_id
+HAVING COUNT("orders".user_id) >= 1
+) as userId
+)
+GROUP BY "users".id
+HAVING SUM(cast("products".price as float) * cast("orders".quantity as float)) > 1000
+ORDER BY SUM(cast("products".price as float) * cast("orders".quantity as float)) DESC;

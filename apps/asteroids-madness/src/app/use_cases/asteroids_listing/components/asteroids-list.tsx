@@ -5,17 +5,31 @@ import {List} from "../../../commons/ui";
 
 export interface AsteroidsListProps {
   asteroidsList: ListingAsteroid[];
-  itsLoading: boolean
+  itsLoading: boolean;
+  addToFavoriteHandler: (asteroid: ListingAsteroid) => void;
+  removeFavoriteHandler: (asteroid: ListingAsteroid) => void;
+  blockActions: boolean;
 }
 
-export const AsteroidsList: React.FC<AsteroidsListProps> = ({asteroidsList, itsLoading}) => {
-  return (
-    <WithLoading itsLoading={itsLoading}>
-      <List
-        data={asteroidsList}
-        fields={[{property: 'name', header: 'Name'}]}
-        actions={[{label: " Favorite", handler: (data: any) => console.log(data)}]}
-      />
-    </WithLoading>
-  )
-}
+export const AsteroidsList: React.FC<AsteroidsListProps> =
+  ({
+     asteroidsList,
+     itsLoading,
+     addToFavoriteHandler,
+     removeFavoriteHandler,
+     blockActions
+   }) => {
+    return (
+      <WithLoading itsLoading={itsLoading}>
+        <List
+          data={asteroidsList}
+          fields={[{property: 'name', header: 'Name'}]}
+          actions={[{
+            resolveLabel: (item: ListingAsteroid) => item.itsFavorite ? "Remove Favorite" : "Favorite",
+            resolveHandler: (item: ListingAsteroid) => item.itsFavorite ? removeFavoriteHandler : addToFavoriteHandler
+          }]}
+          blockActions={blockActions}
+        />
+      </WithLoading>
+    )
+  }
