@@ -24,7 +24,8 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "asteroids-madness:build"
+        "buildTarget": "asteroids-madness:build",
+        "proxyConfig": "apps/asteroids-madness/proxy.conf.json"
       },
       "configurations": {
         "development": {

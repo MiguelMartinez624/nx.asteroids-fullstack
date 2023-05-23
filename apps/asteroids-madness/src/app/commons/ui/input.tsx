@@ -1,0 +1,42 @@
+import React, {ChangeEvent, useState} from "react";
+import {InputHTMLAttributes} from "react"
+import styled from "styled-components";
+
+
+export function useField<T>(initValue: T) {
+  const [value, setValue] = useState(initValue)
+
+  const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    setValue(ev.target.value as T);
+  }
+
+  const clear = () => {
+    setValue(initValue);
+  }
+
+  return {
+    value,
+    onChange,
+    setValue,
+    clear,
+  }
+}
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+}
+
+
+const StyledInput = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const Input: React.FC<InputProps> = (props) => {
+  return (
+    <StyledInput>
+      <span>{props.label}</span>
+      <input {...props} />
+    </StyledInput>
+  )
+}
